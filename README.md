@@ -1,7 +1,5 @@
 # cs331
-system softwares
-# cs232
-###### S4D CS232 Free and Open Source Software Lab  [(cs17d21)](http://14.139.189.217/cs17d/cs17d21)
+###### System Softwares
   
 - [x] **1**. CPU scheduling (FCFS, SJF, Round Robin, Priority)
 - [x] **2**. File organization techniques
