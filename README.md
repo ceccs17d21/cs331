@@ -10,7 +10,7 @@
 - [x] **4**. Disk scheduling (FCFS, SCAN, C-SCAN)
 - [x] **5**. Producer consumer problem
 - [x] **6**. Dining philosopher's problem
-- [ ] **7**. Pass 1 of Two pass assembler
+- [x] **7**. Pass 1 of Two pass assembler
 - [ ] **8**. Pass 2 of Tow pass assembler
 - [ ] **9**. Single pass assembler
 - [ ] **10**. Two pass macro processor
