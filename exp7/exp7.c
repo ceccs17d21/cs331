@@ -2,87 +2,92 @@
 #include<string.h>
 #include<stdlib.h>
 
-/* input file format
+void main(){
+    FILE *inp_f,*optab,*symtab,*ser_sym;
+    int loc=0,flag,flag_op,size,prev_loc,start_addr;
+    char label[20],opcode[20],operand[20],symbol[20],op[20],obc[20],symbol_loc[20];
 
-TEST     START      2000
--        MOV        BETA
-.
-.
-BETA     RESW       2
-.
--        END        -
-(labelbel)  (Opcode)   (operand)   
+    inp_f = fopen("input.txt","r");
+    symtab = fopen("symtab.txt","w");
+    optab = fopen("optab.txt","r");
+    ser_sym = fopen("symtab.txt","r");
 
-   intermediate file format
-
-TEST    START    2000
-2000    -        MOV     BETA     
-.
-.
-2036    BETA     RESW    2
-.
-2048    -        END
-*/
-
-void main() {
-    int loc,start_addr,l,operand,o,len;
-    char opcode[20],label[20],op[20],oper[20];
-    FILE *in_ptr,*opt,*symt;
-    in_ptr=fopen("input.txt","r");
-    symt=fopen("symtab.txt","w");
-
-    fscanf(in_ptr,"%s %s %d",label,opcode,&operand);
-    if(strcmp(opcode,"START")==0) {
-        start_addr=operand;
-        loc=start_addr;
-        printf("\t%s\t%s\t%d\n",label,opcode,operand);
+    fscanf(inp_f,"%s %s %s",label,opcode,operand);
+    if (strcmp(opcode,"START")==0){
+        loc = atol(operand);
+        printf("\t%s\t%s\t%s\n",label,opcode,operand);
+        fscanf(inp_f,"%s %s %s",label,opcode,operand);  
     }
     else
-        loc=0;
+        loc = 0;
+    start_addr = loc;
 
-    fscanf(in_ptr,"%s %s",label,opcode);
-    while(!feof(in_ptr)) {
-        fscanf(in_ptr,"%s",op);
-        printf("%d\t%s\t%s\t%s\n",loc,label,opcode,op);
-        if(strcmp(label,"-")!=0) {
-            fprintf(symt,"\n%d\t%s\n",loc,label);
-        }
-        opt=fopen("optab.txt","r");
-        fscanf(opt,"%s %d",oper,&o);
-        while(!feof(opt)) {
-            if(strcmp(opcode,oper)==0){
-                loc=loc+3;
-                break;
+    while (strcmp(opcode,"END") != 0 || !feof(inp_f)){
+        prev_loc = loc;
+        if( strcmp(label,"#") != 0 ){                //considers single line comments only
+            if (strcmp(label,"-") != 0){               
+                fscanf(ser_sym,"%s %s",symbol,symbol_loc);
+                flag=0;
+                while ( !feof(ser_sym)){
+                    fscanf(ser_sym,"%s %s",symbol,symbol_loc);
+                    if (strcmp(label,symbol) == 0)
+                        flag++;
+                }
+                if (flag == 0){
+                    fprintf(symtab,"%s\t%d\n",label,loc);
+                }
             }
-            fscanf(opt,"%s %d",oper,&o);
-        }
-        fclose(opt);
+            // search optab
+            fscanf(optab,"%s %s",op,obc);
+            flag_op = 0;
+            
+            while( !feof(optab)){
+                fscanf(optab,"%s %s",op,obc);
+                if (strcmp(op,opcode) == 0)
+                    flag_op ++;
+            }
+            if (flag_op == 0)
+                loc += 3;
 
-        if(strcmp(opcode,"RESW")==0) {
-            operand=atoi(op);
-            loc=loc+(3*operand);
-        }
-        else if(strcmp(opcode,"WORD")==0) {
-            loc=loc+3;
-        }
-        else if(strcmp(opcode,"BYTE")==0)
-        {
-            if(op[0]=='X')
-                loc=loc+1;
-            else{
-                len=strlen(op)-2;
-                loc=loc+len;
+            // if opcode not in optab
+            if (strcmp(opcode,"WORD") == 0)
+                loc += 3;
+            else if (strcmp(opcode,"RESB") == 0){
+                size = atol(operand);
+                loc += size;
             }
-        }
-        else if(strcmp(opcode,"RESB")==0) {
-            operand=atoi(op);
-            loc=loc+operand;
-        }
-        fscanf(in_ptr,"%s%s",label,opcode);
-    }
-    if(strcmp(opcode,"END")==0) {
-        printf("SIZE\t%d\n",loc - start_addr);
-    }
-    fclose(in_ptr);
-    fclose(symt);
+            else if (strcmp(opcode,"RESW") == 0){
+                size = atol(operand);
+                loc += size*3;
+            }
+            else if (strcmp(opcode,"BYTE") == 0){
+                size = strlen(operand);
+                loc += size;
+            }      
+        
+            printf("%d\t%s\t%s\t%s\n", prev_loc,label,opcode,operand);
+        } // end of comment
+        else
+            loc += 3;
+        fseek(ser_sym,SEEK_SET,0);
+        fseek(optab,SEEK_SET,0);
+        fscanf(inp_f,"%s %s %s",label,opcode,operand);  
+    } // end of while
+
+    printf("%d\t%s\t%s\n\n", loc,operand,opcode);
+    printf("SIZE\t%d\n",loc-start_addr);
+    fclose(inp_f);
+    fclose(symtab);
+    fclose(optab);
+    fclose(ser_sym);
 }
+
+
+
+
+
+
+
+
+
+
