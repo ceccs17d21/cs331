@@ -1,5 +1,5 @@
-# cs331
-###### System Softwares
+# System Softwares
+###### cs331
   
 - [x] **1**. CPU scheduling (FCFS, SJF, Round Robin, Priority)
 - [x] **2**. File organization techniques
@@ -14,5 +14,5 @@
 - [x] **8**. Pass 2 of Two pass assembler
 - [ ] **9**. Single pass assembler
 - [ ] **10**. Two pass macro processor
-- [ ] **11**. Absolute loader
+- [x] **11**. Absolute loader
 - [ ] **12**. SYMTAB (with hashing)
