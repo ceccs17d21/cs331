@@ -12,7 +12,7 @@ void ase_sort(int a[],int size){
             if(temp[j]<temp[i]){
                 temp[i]=temp[i]+temp[j];
                 temp[j]=temp[i]-temp[j];
-                temp[i]=temp[i]+temp[j];
+                temp[i]=temp[i]-temp[j];
                 a[i]=a[i]+a[j];
                 a[j]=a[i]-a[j];
                 a[i]=a[i]-a[j];
@@ -30,7 +30,7 @@ void des_sort(int a[],int size){
             if(temp[j]>temp[i]){
                 temp[i]=temp[i]+temp[j];
                 temp[j]=temp[i]-temp[j];
-                temp[i]=temp[i]+temp[j];
+                temp[i]=temp[i]-temp[j];
                 a[i]=a[i]+a[j];
                 a[j]=a[i]-a[j];
                 a[i]=a[i]-a[j];
@@ -65,12 +65,14 @@ void scan(){
     ase_sort(u_part,u_flag);
     des_sort(l_part,l_flag);
     for(i=0;i<u_flag;i++){
+        printf("P%d: %d\n",u_part[i],pro[u_part[i]]);
         t_st+=abs(curp-pro[u_part[i]]);
         curp=pro[u_part[i]];
     }
     t_st+=abs(199-curp);
     curp=199;
     for(i=0;i<l_flag;i++){
+        printf("P%d: %d\n",l_part[i],pro[l_part[i]] );
         t_st+=abs(curp-pro[l_part[i]]);
         curp=pro[u_part[i]];
     }
@@ -92,12 +94,14 @@ void cscan(){
     ase_sort(u_part,u_flag);
     ase_sort(l_part,l_flag);
     for(i=0;i<u_flag;i++){
+        printf("P%d: %d\n",u_part[i],pro[u_part[i]]);
         t_st+=abs(curp-pro[u_part[i]]);
         curp=pro[u_part[i]];
     }
     t_st+=abs(199-curp);
     curp=0;
     for(i=0;i<l_flag;i++){
+        printf("P%d: %d\n",l_part[i],pro[l_part[i]] );
         t_st+=abs(curp-pro[l_part[i]]);
         curp=pro[u_part[i]];
     }
@@ -122,7 +126,7 @@ void main(){
         case 2: scan();
                 break;
         case 3: cscan();
-                break;   
+                break;
     }
 
 
